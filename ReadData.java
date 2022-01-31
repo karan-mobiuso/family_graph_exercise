@@ -13,7 +13,7 @@ public class ReadData {
     {
         this.email_to_be_searched=email_to_be_searched;
     }
-
+    //reads data from both files
     public void readData() throws FileNotFoundException, IOException
     {
         int member_id=0;
