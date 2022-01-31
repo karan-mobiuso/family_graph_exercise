@@ -1,26 +1,10 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class CreateGraph {
 
-    static class Edge{
-        String email_of_source_person;
-        String email_of_destination_person;
-        String relation_type;
-
-        public Edge(String email_of_source_person,String email_of_destination_person,String relation_type)
-        {
-            this.email_of_source_person=email_of_source_person;
-            this.email_of_destination_person=email_of_destination_person;
-            this.relation_type=relation_type;
-        }
-    }
-
-    HashMap<String,Integer> personal_data = new HashMap<String,Integer>();
+    HashMap<String,Integer> personal_data = new HashMap<String,Integer>(); //store email and member id in hashmap  as key value pair
     ArrayList<String[]> relation_data = new ArrayList<String[]>();
-    String email_source_person;
-    String[] email_destination_person;
     int total_nodes=0;
     ArrayList<Edge>[] graph_of_relations;
 
@@ -32,6 +16,19 @@ public class CreateGraph {
         for(int i=0;i<total_nodes;i++)
         {
             graph_of_relations[i]=new ArrayList<>();
+        }
+    }
+
+    static class Edge{
+        String email_of_source_person;
+        String email_of_destination_person;
+        String relation_type;
+
+        public Edge(String email_of_source_person,String email_of_destination_person,String relation_type)
+        {
+            this.email_of_source_person=email_of_source_person;
+            this.email_of_destination_person=email_of_destination_person;
+            this.relation_type=relation_type;
         }
     }
     
@@ -59,46 +56,32 @@ public class CreateGraph {
 
     public void displayExtendedFamilyCount(String email_to_be_searched)
     {
-        int extended_family_count=0;
-        Boolean visited[]= new Boolean[total_nodes];
-        extended_family_count=getExtendedFamilyCount(email_to_be_searched,extended_family_count,visited,email_to_be_searched);
-
-        /*ArrayList<Edge> list = graph_of_relations[personal_data.get(email_to_be_searched)];
-        for(int j=0;j<list.size();j++)
+        int extended_family_count=0;//graph_of_relations[personal_data.get(email_to_be_searched)].size();
+        ArrayList<String> list_of_family_relations = new ArrayList<String>();
+        int index = personal_data.get(email_to_be_searched);
+        for(int i=0;i<graph_of_relations[index].size();i++)
         {
-            if(list.get(j).relation_type.equals("FAMILY"))
+            if(graph_of_relations[index].get(i).relation_type.equals("FAMILY"))
             {
                 extended_family_count++;
-            }
-        }*/
-        System.out.println("Extended family count for "+email_to_be_searched+" is "+extended_family_count);
-    }
-
-    public int getExtendedFamilyCount(String email_to_be_searched,int extended_family_count,Boolean[] visited,String visited_email)
-    {
-        visited[personal_data.get(visited_email)]=true;
-        Iterator<CreateGraph.Edge> graph_iterator= graph_of_relations[personal_data.get(email_to_be_searched)].listIterator();
-
-        while(graph_iterator.hasNext())
-        {
-            Edge ed=graph_iterator.next();
-            
-            if(visited[personal_data.get(ed.email_of_source_person)].equals("null") && ed.relation_type.equals("FAMILY") && ed.email_of_source_person.equals(email_to_be_searched))
-            {
-                extended_family_count++;
-                System.out.println(ed.relation_type+" "+ed.email_of_source_person+" "+ed.email_of_destination_person+" "+email_to_be_searched);
-                getExtendedFamilyCount(email_to_be_searched, extended_family_count, visited, ed.email_of_source_person);
-            }
-            else
-            {
-                break;
+                list_of_family_relations.add(graph_of_relations[index].get(i).email_of_destination_person);
             }
         }
-        for(int i=0;i<visited.length;i++)
+        
+        for(int i=0;i<list_of_family_relations.size();i++)
         {
-            System.out.print(visited[i]+" ");
+            for(int j=0;j<graph_of_relations[personal_data.get(list_of_family_relations.get(i))].size();j++)
+            {
+                if(graph_of_relations[personal_data.get(list_of_family_relations.get(i))].get(j).relation_type.equals("FAMILY") && !list_of_family_relations.contains(graph_of_relations[personal_data.get(list_of_family_relations.get(i))].get(j).email_of_destination_person))
+                {
+                    System.out.println(graph_of_relations[personal_data.get(list_of_family_relations.get(i))].get(j).email_of_destination_person);
+                    extended_family_count++;
+                    list_of_family_relations.add(graph_of_relations[personal_data.get(list_of_family_relations.get(i))].get(j).email_of_destination_person);
+                }
+            }
         }
-        return extended_family_count;
+        System.out.println("Extended family count of "+email_to_be_searched+" is "+extended_family_count);
+
     }
 
 }
