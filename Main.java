@@ -11,7 +11,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         email_to_be_searched=sc.nextLine();
 
-        ReadData rd = new ReadData(email_to_be_searched);
+        DataReaderClass rd = new DataReaderClass(email_to_be_searched);
         rd.readData();
     }
 }
