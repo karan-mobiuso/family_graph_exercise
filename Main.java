@@ -6,12 +6,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String args[]) throws FileNotFoundException, IOException
     {
-        String email_to_be_searched;
+        String emailToBeSearched;
         System.out.print("Enter email of person whose data is required:");
         Scanner sc = new Scanner(System.in);
-        email_to_be_searched=sc.nextLine();
+        emailToBeSearched=sc.nextLine();
 
-        DataReaderClass rd = new DataReaderClass(email_to_be_searched);
+        DataReaderClass rd = new DataReaderClass(emailToBeSearched);
         rd.readData();
     }
 }
